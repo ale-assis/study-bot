@@ -253,7 +253,14 @@ class Client(discord.Client):
             self.save_data()
 
 tribunaldo = Client()
-tribunaldo.run(Config.TOKEN)
+# tribunaldo.run(Config.TOKEN) -> descomenta e apaga a parte abaixo pra rodar local
+
+# Função que o server.py chama para rodar o bot no deploy
+def run_bot():
+    tribunaldo.run(Config.TOKEN)
+
+if __name__ == "__main__":
+    run_bot()
 
 # # DESPERTAR
 # @tree.command(guild=discord.Object(id=ID_DO_SERVIDOR), name='despertar', description='teste')
