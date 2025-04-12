@@ -61,7 +61,7 @@ class Client(discord.Client):
 
         # Forçar a busca dos membros para preencher o cache
         print("Buscando membros do servidor para preencher o cache...")
-        async for member in guild.fetch_member(limit=None):
+        async for member in guild.fetch_members(limit=None):
             pass # Apenas percorre os membros para garantir que o cache seja preenchido
         print(f"Cache de membros preenchido. Total de membros: {len(guild.members)}")
 
