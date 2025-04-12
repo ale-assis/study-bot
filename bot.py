@@ -59,6 +59,12 @@ class Client(discord.Client):
             print("Servidor não encontrado. Verifique o ID.")
             return
 
+        # Forçar a busca dos membros para preencher o cache
+        print("Buscando membros do servidor para preencher o cache...")
+        async for member in guild.fetch_member(limit=None):
+            pass # Apenas percorre os membros para garantir que o cache seja preenchido
+        print(f"Cache de membros preenchido. Total de membros: {len(guild.members)}")
+
         restriction_role = guild.get_role(self.restriction_role_id)
         if not restriction_role:
             print("Cargo de restrição não encontrado. Verifique o ID.")
