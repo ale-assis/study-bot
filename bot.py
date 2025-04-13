@@ -180,8 +180,8 @@ async def on_voice_state_update(member, before, after):
                 save_data()
 
     # SE O MEMBRO SAI DO CANAL DE VOZ
-    if (before.channel is not None and before.channel.id == FOCUS_CHANNEL_NAME and
-    (after.channel is None or (after.channel is not None and after.channel.id != FOCUS_CHANNEL_NAME))):
+    if ((before.channel is None and after.channel is not None and after.channel.id == FOCUS_CHANNEL_NAME) or
+            (before.channel is not None and before.channel.id != FOCUS_CHANNEL_NAME and after.channel is not None and after.channel.id == FOCUS_CHANNEL_NAME)):
         last_exit_times[member.id] = time.time()
         save_data()
 
