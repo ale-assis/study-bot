@@ -27,6 +27,11 @@ class Client(discord.Client):
         self.data_file = "time_data.json"
         self.load_data()
 
+    # Comandos
+    @app_commands.command(name="despertar", description="verifica se o tribunaldo está acordado")
+    async def despertar(self, interaction: discord.Interaction):
+        await interaction.response.send_message("Estou funcionando! AUUUUU 🐺", ephemeral=False)
+
     def load_data(self):
         if os.path.exists(self.data_file):
             with open(self.data_file, "r") as f:
