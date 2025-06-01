@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from constants_qa import TOKEN
+from constants.constants_qa import TOKEN
 
 intents = discord.Intents.default()
 intents.members = True

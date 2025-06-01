@@ -6,10 +6,12 @@ load_dotenv()
 class Config:
     TOKEN = os.getenv("TOKEN")
     ID_DO_SERVIDOR = int(os.getenv("ID_DO_SERVIDOR"))
+    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
     class Channels:
         ID_CANAL_VOZ_FOCO = int(os.getenv("ID_CANAL_VOZ_FOCO"))
         ID_CANAL_LOG_FOCO = int(os.getenv("ID_CANAL_LOG_FOCO"))
+        ID_CANAL_CHAT_BOT = int(os.getenv("ID_CANAL_CHAT_BOT"))
 
     class Roles:
         ID_CARGO_RESTRICAO = int(os.getenv("ID_CARGO_RESTRICAO"))

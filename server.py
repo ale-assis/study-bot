@@ -1,7 +1,7 @@
 from flask import Flask
 import threading
 import os
-from bot import run_bot  # Importa a função run_bot do bot.py
+from bot import run_bot  # Importa a função run_bot do bot_antigo.py
 
 app = Flask(__name__)
 
