@@ -10,9 +10,11 @@ from constants.constants_prod import Config
 class TribunaldoChatBot:
     def __init__(self, client):
         self.client = client
-        diretorio_gemini_data = r"C:\Users\rafae\OneDrive\Desktop\Code HUB\tribunaldo-teste\data"
-        nome_arquivo_gemini_data = "gemini_chat_data.json"
-        self.data_file = os.path.join(diretorio_gemini_data, nome_arquivo_gemini_data)
+        # Definir o caminho do arquivo usando um caminho relativo
+        base_dir = os.path.dirname(os.path.abspath(__file__))  # Diretório do script atual
+        data_dir = os.path.join(base_dir, "data")  # Diretório data no mesmo nível do projeto
+        os.makedirs(data_dir, exist_ok=True)  # Criar o diretório data, se não existir
+        self.data_file = os.path.join(data_dir, "gemini_chat_data.json")
         self.conversation_history = {}
         self.user_cooldowns = {}
         self.cooldown_time = 5  # 5 segundos entre mensagens

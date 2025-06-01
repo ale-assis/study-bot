@@ -15,9 +15,11 @@ class FocusMode:
         self.confessions_role_id = Config.Roles.ID_CONFESSIONS_ROLE
         self.cartola_role_id = Config.Roles.ID_CARTOLA_ROLE
         self.pokemon_role_id = Config.Roles.ID_POKEMON_ROLE
-        diretorio_time_data = r"C:\Users\rafae\OneDrive\Desktop\Code HUB\tribunaldo-teste\data"
-        nome_arquivo_data = "time_data.json"
-        self.data_file = os.path.join(diretorio_time_data, nome_arquivo_data)
+        # Definir o caminho do arquivo usando um caminho relativo
+        base_dir = os.path.dirname(os.path.abspath(__file__))  # Diretório do script atual
+        data_dir = os.path.join(base_dir, "data")  # Diretório data no mesmo nível do projeto
+        os.makedirs(data_dir, exist_ok=True)  # Criar o diretório data, se não existir
+        self.data_file = os.path.join(data_dir, "time_data.json")
         self.last_exit_times = {}
         self.removed_roles = {}
         
