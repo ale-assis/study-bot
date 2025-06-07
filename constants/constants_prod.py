@@ -12,6 +12,7 @@ class Config:
         ID_CANAL_VOZ_FOCO = int(os.getenv("ID_CANAL_VOZ_FOCO"))
         ID_CANAL_LOG_FOCO = int(os.getenv("ID_CANAL_LOG_FOCO"))
         ID_CANAL_CHAT_BOT = int(os.getenv("ID_CANAL_CHAT_BOT"))
+        ID_CANAL_VOZ_CAMERA = int(os.getenv("ID_CANAL_VOZ_CAMERA"))
 
     class Roles:
         ID_CARGO_RESTRICAO = int(os.getenv("ID_CARGO_RESTRICAO"))
@@ -20,3 +21,5 @@ class Config:
         ID_CONFESSIONS_ROLE = int(os.getenv("ID_CONFESSIONS_ROLE"))
         ID_CARTOLA_ROLE = int(os.getenv("ID_CARTOLA_ROLE"))
         ID_POKEMON_ROLE = int(os.getenv("ID_POKEMON_ROLE"))
+        ID_GARTIC_ROLE = int(os.getenv("ID_GARTIC_ROLE"))
+        ID_XADREZ_ROLE = int(os.getenv("ID_XADREZ_ROLE"))

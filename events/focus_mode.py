@@ -15,6 +15,8 @@ class FocusMode:
         self.confessions_role_id = Config.Roles.ID_CONFESSIONS_ROLE
         self.cartola_role_id = Config.Roles.ID_CARTOLA_ROLE
         self.pokemon_role_id = Config.Roles.ID_POKEMON_ROLE
+        self.gartic_role_id = Config.Roles.ID_GARTIC_ROLE
+        self.xadrez_role_id = Config.Roles.ID_XADREZ_ROLE
         # Definir o caminho do arquivo usando um caminho relativo
         base_dir = os.path.dirname(os.path.abspath(__file__))  # Diretório do script atual
         data_dir = os.path.join(base_dir, "data")  # Diretório data no mesmo nível do projeto
@@ -22,7 +24,7 @@ class FocusMode:
         self.data_file = os.path.join(data_dir, "time_data.json")
         self.last_exit_times = {}
         self.removed_roles = {}
-        
+
         # Carregar dados na inicialização
         self.load_data()
 
@@ -72,7 +74,8 @@ class FocusMode:
 
             if time_since_exit < self.restriction_time:
                 if restriction_role not in usuario.roles:
-                    print(f"Adicionando cargo de restrição a {usuario} (tempo restante: {self.restriction_time - time_since_exit} segundos).")
+                    print(
+                        f"Adicionando cargo de restrição a {usuario} (tempo restante: {self.restriction_time - time_since_exit} segundos).")
                     await usuario.add_roles(restriction_role)
             else:
                 print(f"Período de restrição expirado para {usuario}. Removendo do last_exit_times.")
@@ -88,7 +91,7 @@ class FocusMode:
         # Verifica se o membro entrou no canal de foco
         if self._entered_focus_channel(before, after, FOCUS_CHANNEL_NAME):
             await self._handle_focus_enter(member, after, FOCUS_LOG_CHANNEL, guild)
-        
+
         # Verifica se o membro saiu do canal de foco
         elif self._left_focus_channel(before, after, FOCUS_CHANNEL_NAME):
             await self._handle_focus_exit(member, before, FOCUS_LOG_CHANNEL, guild)
@@ -96,7 +99,7 @@ class FocusMode:
     def _entered_focus_channel(self, before, after, focus_channel_id):
         """Verifica se o membro entrou no canal de foco"""
         return ((before.channel is None and after.channel is not None and after.channel.id == focus_channel_id) or
-                (before.channel is not None and before.channel.id != focus_channel_id and 
+                (before.channel is not None and before.channel.id != focus_channel_id and
                  after.channel is not None and after.channel.id == focus_channel_id))
 
     def _left_focus_channel(self, before, after, focus_channel_id):
@@ -112,10 +115,10 @@ class FocusMode:
         embed_focus_log = discord.Embed(
             description=f"""Agora acabou a brincadeira, {member.mention}! Vai estudar que seu FUTURO DEPENDE DISSO!!! 
 
-            Você acabou de entrar no canal de voz {after.channel.mention} e o Modo Foco está ATIVADO! 🟢 
+                    Você acabou de entrar no canal de voz {after.channel.mention} e o Modo Foco está ATIVADO! 🟢 
 
-            Todas as categorias e canais de texto do servidor foram OCULTADOS para evitar distrações. 
-            """,
+                    Todas as categorias e canais de texto do servidor foram OCULTADOS para evitar distrações. 
+                    """,
             color=9055202
         )
         embed_focus_log.set_author(
@@ -145,6 +148,8 @@ class FocusMode:
         confessions_role = guild.get_role(self.confessions_role_id)
         cartola_role = guild.get_role(self.cartola_role_id)
         pokemon_role = guild.get_role(self.pokemon_role_id)
+        gartic_role = guild.get_role(self.gartic_role_id)
+        xadrez_role = guild.get_role(self.xadrez_role_id)
 
         removed_roles_list = []
 
@@ -164,6 +169,14 @@ class FocusMode:
             await member.remove_roles(pokemon_role)
             removed_roles_list.append(Config.Roles.ID_POKEMON_ROLE)
 
+        if gartic_role and gartic_role in member.roles:
+            await member.remove_roles(gartic_role)
+            removed_roles_list.append(Config.Roles.ID_GARTIC_ROLE)
+
+        if xadrez_role and xadrez_role in member.roles:
+            await member.remove_roles(xadrez_role)
+            removed_roles_list.append(Config.Roles.ID_XADREZ_ROLE)
+
         if removed_roles_list:
             print(f"Salvando cargos removidos para {member}: {removed_roles_list}")
             self.removed_roles[member.id] = removed_roles_list
@@ -180,13 +193,13 @@ class FocusMode:
             await member.add_roles(restriction_role)
 
         print(f"{member} saiu do canal de voz {before.channel.name}")
-        
+
         # Criar embed de saída
         embed_focus_log = discord.Embed(
             description=f"""AUUUUUUU! Estou orgulhoso de você, {member.mention}! Parabéns pelo foco hoje, você está um pouco mais perto de realizar seu SONHO!  
 
-            Agora que você saiu do canal no canal de voz {before.channel.mention}, o Modo Foco está DESATIVADO! 🔴 
-            """,
+                    Agora que você saiu do canal no canal de voz {before.channel.mention}, o Modo Foco está DESATIVADO! 🔴 
+                    """,
             color=9055202
         )
         embed_focus_log.set_author(
@@ -207,7 +220,7 @@ class FocusMode:
         # Remover cargo de modo foco e restaurar cargos removidos
         focus_mode_role = guild.get_role(self.focus_mode_role_id)
         await member.remove_roles(focus_mode_role)
-        
+
         user = guild.get_member(member.id)
         await self._restore_removed_roles(user, guild)
 
@@ -224,13 +237,14 @@ class FocusMode:
     async def _restore_removed_roles(self, user, guild):
         """Restaura os cargos que foram removidos durante o modo foco"""
         print(f"Após guild.get_member: user = {user}")
-        print(f"Verificando cargos removidos para member.id {user.id if user else 'None'}. Estado atual de removed_roles: {self.removed_roles}")
+        print(
+            f"Verificando cargos removidos para member.id {user.id if user else 'None'}. Estado atual de removed_roles: {self.removed_roles}")
 
         if user and user.id in self.removed_roles:
             print(f"Entrou no if: user.id {user.id} encontrado em removed_roles")
             list_of_removed_role_ids = self.removed_roles[user.id]
             print(f"Lista de cargos a restaurar: {list_of_removed_role_ids}")
-            
+
             for each_role_id in list_of_removed_role_ids:
                 role_object = guild.get_role(each_role_id)
                 if not role_object:
@@ -241,7 +255,7 @@ class FocusMode:
                     continue
                 print(f"Restaurando cargo {role_object.name} para {user}.")
                 await user.add_roles(role_object)
-            
+
             del self.removed_roles[user.id]
             self.save_data()
         else:
