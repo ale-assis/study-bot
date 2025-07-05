@@ -1,3 +1,5 @@
+import time
+import asyncio
 import discord
 from discord import app_commands
 from constants.constants_prod import Config
@@ -74,9 +76,36 @@ async def on_message(message):
     """Processa mensagens para o chat bot"""
     await tribunaldo_chat_bot.handle_message(message)
 
-# Função que o server.py chama para rodar o bot no deploy
 def run_bot():
-    client.run(Config.TOKEN)
+    """
+    Função que o server.py chama para rodar o bot no deploy.
+    Inclui um loop infinito com tratamento de exceções para garantir
+    que o bot continue rodando mesmo após erros de conexão ou rate limit.
+    """
+    loop = asyncio.get_event_loop()
+    while True:
+        try:
+            # Inicia o bot
+            loop.run_until_complete(client.start(Config.TOKEN))
+        except discord.errors.HTTPException as e:
+            # Verifica se o erro é de "Too Many Requests" (Rate Limit)
+            if e.status == 429:
+                print("======================================================")
+                print("Fomos bloqueados por Rate Limit (Erro 429).")
+                print("Aguardando 30 minutos antes de tentar reconectar...")
+                print(f"Detalhes do erro: {e.text}")
+                print("======================================================")
+                time.sleep(1800)  # Dorme por 30 minutos
+            # Trata outros erros de HTTP
+            else:
+                print(f"Ocorreu um erro de HTTP não tratado: {e}")
+                print("Aguardando 1 minuto antes de tentar de novo...")
+                time.sleep(60)  # Espera 1 minuto
+        except Exception as e:
+            # Trata qualquer outro erro inesperado
+            print(f"Ocorreu um erro inesperado: {e}")
+            print("Aguardando 10 segundos antes de reiniciar...")
+            time.sleep(10)
 
-    if __name__ == "__main__":
+if __name__ == "__main__":
      run_bot()
